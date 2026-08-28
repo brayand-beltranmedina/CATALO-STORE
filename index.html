@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THOMY STORE — Luxury Streetwear & Importados</title>
+    <!-- Favicon con tu logo -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="editorial-theme">
+
+    <div class="top-ticker">
+        <span>🔥 ENVÍO GRATIS A TODO EL PAÍS POR COMPRAS SUPERIORES A $400.000 COP 🔥 NUEVA COLECCIÓN 2026</span>
+    </div>
+
+    <header class="editorial-header">
+        <div class="brand-logo" style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <img src="logo.png" alt="Thomy Store Logo" style="height: 55px; width: auto; object-fit: contain;">
+        </div>
+        
+        <nav class="editorial-nav">
+            <a href="#inicio">Inicio</a>
+            <a href="#presentacion">Nosotros</a>
+            
+            <div class="dropdown">
+                <a href="#catalogo-section" onclick="mostrarTodoCatalogo()" style="color: var(--gold); font-weight: 700;">
+                    Categorías & Catálogo <i class="fas fa-chevron-down" style="font-size: 9px; margin-left: 4px;"></i>
+                </a>
+                <div class="dropdown-content" id="menu-dropdown-categorias-dinamico" style="max-height: 450px; overflow-y: auto;">
+                    <!-- Se carga dinámicamente con JS -->
+                </div>
+            </div>
+
+            <a href="#ofertas">Ofertas</a>
+            <a href="#outfits">Outfits</a>
+            <a href="#beneficios">Experiencia</a>
+            <a href="#testimonios">Testimonios</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <div class="editorial-actions">
+            <input type="text" id="busqueda-tienda-global" placeholder="Buscar referencia..." oninput="filtrarPorBusqueda(this.value)" class="editorial-search">
+            <button class="editorial-btn" onclick="toggleCart()"><i class="fas fa-shopping-bag"></i> <span id="cart-count">0</span></button>
+            <button class="editorial-btn admin-trig" onclick="abrirAdminModal()"><i class="fas fa-terminal"></i></button>
+        </div>
+    </header>
+
+    <a href="https://wa.me/573246359369?text=Hola%20Thomy%20Store,%20quiero%20información%20sobre%20sus%20productos" target="_blank" class="whatsapp-float-btn" title="Escríbenos por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <section id="inicio" class="editorial-hero">
+        <div class="carousel-container" id="carrusel-galeria-container"></div>
+        <div class="hero-controls">
+            <button class="ctrl-btn" onclick="moverCarrusel(-1)"><i class="fas fa-arrow-left"></i></button>
+            <button class="ctrl-btn" onclick="moverCarrusel(1)"><i class="fas fa-arrow-right"></i></button>
+        </div>
+    </section>
+
+    <!-- SECCIÓN PRESENTACIÓN INTERACTIVA (LOGO CON ILUMINACIÓN A LA IZQUIERDA Y TEXTO A LA DERECHA) -->
+    <section id="presentacion" class="editorial-section dark-zone">
+        <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center;">
+            <div style="text-align: center; position: relative;">
+                <!-- Efecto de iluminación de fondo tipo glow dorado -->
+                <div style="position: absolute; inset: 0; background: radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%); filter: blur(30px); z-index: 1; pointer-events: none;"></div>
+                <img src="logo.png" alt="Thomy Store Branding" style="position: relative; z-index: 2; max-width: 260px; width: 100%; height: auto; filter: drop-shadow(0 0 25px rgba(212,175,55,0.4)); transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div>
+                <span class="sub-title">EST. 2026 // NUESTRA IDENTIDAD</span>
+                <h2 style="font-size: 36px; margin-bottom: 20px; letter-spacing: 2px;">THOMY STORE</h2>
+                <p style="color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 15px;">
+                    Bienvenido al estándar más alto en <strong style="color: var(--gold);">Luxury Streetwear</strong> e importaciones exclusivas. Diseñamos experiencias de estilo únicas para quienes no siguen tendencias, las definen.
+                </p>
+                <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">
+                    Cada prenda de alto gramaje, calzado importado, perfume y accesorio de nuestra curaduría pasa por rigurosos estándares de calidad para garantizar distinción absoluta.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUTFITS DE LA SEMANA (EN 2X2) -->
+    <section id="outfits" class="editorial-section">
+        <div class="section-header-editorial">
+            <span class="sub-title">01 // LOOKS COMPLETOS</span>
+            <h2>Outfits de la Semana</h2>
+        </div>
+        <div class="asym-grid" id="outfit-container"></div>
+    </section>
+
+    <!-- CATEGORÍAS PRINCIPALES (EN 2X2) -->
+    <section id="grid-categorias" class="editorial-section dark-zone">
+        <div class="section-header-editorial">
+            <span class="sub-title">02 // EXPLORA POR LÍNEAS</span>
+            <h2>Categorías Principales</h2>
+        </div>
+        <div class="asym-grid" id="grid-2x2-container"></div>
+    </section>
+
+    <!-- NUEVA SECCIÓN INTERACTIVA: EXPERIENCIA THOMY (BENEFICIOS) -->
+    <section id="beneficios" class="editorial-section">
+        <div class="section-header-editorial" style="text-align: center;">
+            <span class="sub-title">03 // GARANTÍA Y EXCLUSIVIDAD</span>
+            <h2>La Experiencia Thomy</h2>
+        </div>
+        <div class="info-cards-grid" style="margin-top: 40px;">
+            <div class="info-card" style="text-align: center; border-color: var(--border);">
+                <div style="font-size: 28px; color: var(--gold); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i></div>
+                <h3 style="font-size: 14px; letter-spacing: 2px; margin-bottom: 10px;">Calidad Garantizada</h3>
+                <p style="font-size: 12px; color: var(--muted); line-height: 1.6;">Productos seleccionados con acabados de alta gama y materiales duraderos.</p>
+            </div>
+            <div class="info-card" style="text-align: center; border-color: var(--border);">
+                <div style="font-size: 28px; color: var(--gold); margin-bottom: 15px;"><i class="fas fa-shipping-fast"></i></div>
+                <h3 style="font-size: 14px; letter-spacing: 2px; margin-bottom: 10px;">Envíos Seguros</h3>
+                <p style="font-size: 12px; color: var(--muted); line-height: 1.6;">Despachos rápidos y asegurados a todo el territorio nacional con guía en vivo.</p>
+            </div>
+            <div class="info-card" style="text-align: center; border-color: var(--border);">
+                <div style="font-size: 28px; color: var(--gold); margin-bottom: 15px;"><i class="fas fa-headset"></i></div>
+                <h3 style="font-size: 14px; letter-spacing: 2px; margin-bottom: 10px;">Asesoría VIP 24/7</h3>
+                <p style="font-size: 12px; color: var(--muted); line-height: 1.6;">Atención directa y personalizada por WhatsApp para resolver cualquier duda de tallas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="ofertas" class="editorial-section dark-zone">
+        <div class="section-header-editorial">
+            <span class="sub-title">04 // FLASH SALE</span>
+            <h2>Ofertas Especiales</h2>
+        </div>
+        <div class="editorial-product-grid" id="ofertas-container"></div>
+    </section>
+
+    <section id="catalogo-section" class="editorial-section">
+        <div class="section-header-editorial" style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <span class="sub-title">05 // INVENTARIO VIP</span>
+                <h2>Catálogo de Referencias</h2>
+            </div>
+            <button id="btn-ver-todo" class="editorial-outline-btn" onclick="mostrarTodoCatalogo()" style="display: none;">Ver Todo</button>
+        </div>
+        <div id="categorias-ordenadas-container"></div>
+    </section>
+
+    <section id="testimonios" class="editorial-section dark-zone">
+        <div class="section-header-editorial" style="text-align: center;">
+            <span class="sub-title">06 // CLIENTES SATISFECHOS</span>
+            <h2>Lo que dicen nuestros compradores</h2>
+        </div>
+        <div class="info-cards-grid" style="margin-top: 40px;">
+            <div class="info-card" style="text-align: left;">
+                <div style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; line-height: 1.6;">"La calidad de las camisas premium y el alto gramaje es brutal. Envío súper rápido."</p>
+                <strong style="font-size: 12px; color: #fff;">— Carlos M.</strong>
+            </div>
+            <div class="info-card" style="text-align: left;">
+                <div style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; line-height: 1.6;">"Excelentes zapatillas originales y turcas, idénticas a las fotos. Muy buena atención."</p>
+                <strong style="font-size: 12px; color: #fff;">— Sebastián R.</strong>
+            </div>
+            <div class="info-card" style="text-align: left;">
+                <div style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; line-height: 1.6;">"Los accesorios, billeteras y perfumes están en otro nivel. 100% recomendado."</p>
+                <strong style="font-size: 12px; color: #fff;">— Andrea P.</strong>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="editorial-section">
+        <div class="section-header-editorial" style="text-align: center; max-width: 600px; margin: 0 auto 30px auto;">
+            <span class="sub-title">07 // ATENCIÓN DIRECTA</span>
+            <h2>Contáctanos</h2>
+            <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">¿Tienes dudas sobre tallas, disponibilidad o envíos? Escríbenos directamente.</p>
+        </div>
+        <div style="max-width: 500px; margin: 0 auto; background: var(--surface); padding: 30px; border-radius: 8px; border: 1px solid var(--border);">
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 5px;">TU NOMBRE</label>
+                <input type="text" id="contacto-nombre" placeholder="Escribe tu nombre..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 5px;">MENSAJE O DUDA</label>
+                <textarea id="contacto-mensaje" placeholder="¿En qué podemos ayudarte?" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none; height:80px;"></textarea>
+            </div>
+            <button class="checkout-btn" onclick="enviarMensajeContactoWhatsApp()">ENVIAR MENSAJE POR WHATSAPP</button>
+        </div>
+    </section>
+
+    <!-- FOOTER CON COPYRIGHT PROFESIONAL -->
+    <footer class="editorial-footer">
+        <div style="margin-bottom: 15px;"><img src="logo.png" alt="Footer Logo" style="height: 65px; object-fit: contain;"></div>
+        <h3 style="letter-spacing: 4px; margin-bottom: 5px;">THOMY STORE</h3>
+        <p style="margin-bottom: 25px;">Luxury Streetwear, Ropa, Calzado, Perfumes & Accesorios Exclusivos 2026.</p>
+        <div style="border-top: 1px solid var(--border); padding-top: 25px; font-size: 11px; color: var(--muted); letter-spacing: 1px;">
+            &copy; 2026 THOMY STORE. Todos los derechos reservados. Desarrollado con Estilo y Exclusividad.
+        </div>
+    </footer>
+
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Tus Productos en el Carrito</h3>
+            <button onclick="toggleCart()" class="close-drawer"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>TOTAL ESTIMADO</span>
+                <span id="cart-total" style="color: var(--gold);">$0</span>
+            </div>
+            <button class="checkout-btn" onclick="enviarPedidoWhatsApp()">FINALIZAR PEDIDO POR WHATSAPP</button>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="cerrarLightbox()">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Zoom">
+    </div>
+
+    <!-- MODAL ADMIN -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content editorial-modal" style="max-width: 1100px;">
+            <span class="close" onclick="cerrarAdminModal()">&times;</span>
+            
+            <div id="admin-login-section" class="admin-auth">
+                <h2>PANEL DE ADMINISTRACIÓN</h2>
+                <input type="email" id="admin-email" placeholder="Correo autorizado">
+                <input type="password" id="admin-pass" placeholder="Contraseña">
+                <button class="checkout-btn" onclick="loginAdmin()">INGRESAR AL SISTEMA</button>
+            </div>
+
+            <div id="admin-dashboard-content" style="display: none;">
+                <div class="admin-head">
+                    <h2>CONTROL TOTAL DE THOMY STORE</h2>
+                    <button class="editorial-outline-btn" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
+                </div>
+
+                <div class="admin-tabs" style="display: flex; gap: 8px; margin: 25px 0; flex-wrap: wrap;">
+                    <button class="tab-btn active" onclick="cambiarTabAdmin('productos', this)"><i class="fas fa-box"></i> Productos</button>
+                    <button class="tab-btn" onclick="cambiarTabAdmin('categorias', this)"><i class="fas fa-tags"></i> Gestionar Categorías</button>
+                    <button class="tab-btn" onclick="cambiarTabAdmin('ofertas', this)"><i class="fas fa-bolt"></i> Ofertas Flash</button>
+                    <button class="tab-btn" onclick="cambiarTabAdmin('outfits', this)"><i class="fas fa-tshirt"></i> Outfits</button>
+                    <button class="tab-btn" onclick="cambiarTabAdmin('carrusel', this)"><i class="fas fa-images"></i> Carrusel</button>
+                    <button class="tab-btn" onclick="cambiarTabAdmin('inventario', this)"><i class="fas fa-database"></i> Inventario</button>
+                </div>
+
+                <!-- TAB PRODUCTOS -->
+                <div id="tab-productos" class="admin-tab-pane tab-content active" style="display: block;">
+                    <h3 style="color: var(--gold); margin-bottom: 20px; font-size: 14px;">GESTIÓN DE PRODUCTOS</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">NOMBRE DEL PRODUCTO</label>
+                            <input type="text" id="prod-name" placeholder="Ej: Camisa Premium / Zapatos" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">CATEGORÍA</label>
+                            <select id="prod-category" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                                <!-- Se llena dinámicamente -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">PRECIO ($ COP)</label>
+                            <input type="number" id="prod-price" placeholder="Ej: 95000" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">SUBIR MÚLTIPLES IMÁGENES / CARPETA</label>
+                            <input type="file" id="prod-file" accept="image/*" webkitdirectory directory multiple onchange="cargarCarpetaMasivaOptimizada(event)" style="background:var(--bg); border:1px solid var(--border); color:#fff; padding:8px; border-radius:4px; width:100%; font-size:11px;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="prod-img-url" placeholder="O pega el enlace URL de la imagen..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <textarea id="prod-desc" placeholder="Descripción..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none; height:60px;"></textarea>
+                    </div>
+                    <div id="progreso-carga" style="color: var(--gold); font-size: 12px; margin-bottom: 15px; font-weight: 700;"></div>
+                    <button class="checkout-btn" onclick="guardarProductoAdmin()">PUBLICAR EN CATÁLOGO</button>
+                </div>
+
+                <!-- TAB GESTIONAR CATEGORÍAS -->
+                <div id="tab-categorias" class="admin-tab-pane tab-content" style="display: none;">
+                    <h3 style="color: var(--gold); margin-bottom: 20px; font-size: 14px;">GESTIÓN Y FOTOS DE CATEGORÍAS</h3>
+                    
+                    <div style="background: var(--bg); padding: 20px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 25px;">
+                        <h4 style="font-size: 12px; margin-bottom: 15px; color: #fff;">Crear o Actualizar Categoría con Imagen Principal</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <input type="text" id="admin-cat-nombre" placeholder="Nombre (Ej: Ropa, Zapatos, Perfumes)" style="background:var(--surface); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none; font-size:12px;">
+                            <input type="text" id="admin-cat-img" placeholder="URL de la imagen (o súbela abajo)" style="background:var(--surface); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none; font-size:12px;">
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                            <input type="file" id="admin-cat-file" accept="image/*" onchange="cargarImgUnicaOptimizada(event, 'admin-cat-img')" style="background:var(--surface); border:1px solid var(--border); color:#fff; padding:8px; border-radius:4px; width:100%; font-size:11px;">
+                            <button class="editorial-outline-btn" onclick="guardarCategoriaAdmin()" style="white-space: nowrap; font-size: 11px; padding: 12px 25px;">Guardar Categoría</button>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size: 12px; margin-bottom: 10px; color: var(--gold);">Categorías Existentes</h4>
+                    <div style="overflow-x: auto; max-height: 300px;">
+                        <table class="editorial-table">
+                            <thead>
+                                <tr>
+                                    <th>Foto Principal</th>
+                                    <th>Nombre Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-categorias-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB OFERTAS -->
+                <div id="tab-ofertas" class="admin-tab-pane tab-content" style="display: none;">
+                    <h3 style="color: var(--gold); margin-bottom: 20px; font-size: 14px;">GESTIÓN DE OFERTAS ESPECIALES</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">NOMBRE</label>
+                            <input type="text" id="oferta-name" placeholder="Ej: Zapatillas Confort" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">CATEGORÍA</label>
+                            <input type="text" id="oferta-cat" value="Zapatos Turcos" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">PRECIO OFERTA</label>
+                            <input type="number" id="oferta-price" placeholder="160000" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">PRECIO ANTERIOR (Opcional)</label>
+                            <input type="number" id="oferta-oldprice" placeholder="220000" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">SUBIR IMAGEN OFERTA</label>
+                            <input type="file" id="oferta-file" accept="image/*" onchange="cargarImgUnicaOptimizada(event, 'oferta-img')" style="background:var(--bg); border:1px solid var(--border); color:#fff; padding:8px; border-radius:4px; width:100%; font-size:11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">O ENLACE URL</label>
+                            <input type="text" id="oferta-img" placeholder="https://..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <button class="checkout-btn" onclick="guardarOfertaAdmin()">PUBLICAR OFERTA FLASH</button>
+                </div>
+
+                <!-- TAB OUTFITS -->
+                <div id="tab-outfits" class="admin-tab-pane tab-content" style="display: none;">
+                    <h3 style="color: var(--gold); margin-bottom: 20px; font-size: 14px;">GESTIÓN DE OUTFITS</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">NOMBRE OUTFIT</label>
+                            <input type="text" id="outfit-name" placeholder="Look Urbano" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">PRECIO</label>
+                            <input type="number" id="outfit-price" placeholder="250000" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="outfit-desc" placeholder="Descripción..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">SUBIR IMAGEN OUTFIT</label>
+                            <input type="file" id="outfit-file" accept="image/*" onchange="cargarImgUnicaOptimizada(event, 'outfit-img')" style="background:var(--bg); border:1px solid var(--border); color:#fff; padding:8px; border-radius:4px; width:100%; font-size:11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">O ENLACE URL</label>
+                            <input type="text" id="outfit-img" placeholder="https://..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <button class="checkout-btn" onclick="guardarOutfitAdmin()">PUBLICAR OUTFIT</button>
+                </div>
+
+                <!-- TAB CARRUSEL -->
+                <div id="tab-carrusel" class="admin-tab-pane tab-content" style="display: none;">
+                    <h3 style="color: var(--gold); margin-bottom: 20px; font-size: 14px;">GESTIÓN DE BANNERS DEL CARRUSEL</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">TÍTULO</label>
+                            <input type="text" id="slide-title" placeholder="NUEVA COLECCIÓN" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">SUBÍTULO</label>
+                            <input type="text" id="slide-desc" placeholder="Alto gramaje" style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">SUBIR FONDO BANNER</label>
+                            <input type="file" id="slide-file" accept="image/*" onchange="cargarImgUnicaOptimizada(event, 'slide-img')" style="background:var(--bg); border:1px solid var(--border); color:#fff; padding:8px; border-radius:4px; width:100%; font-size:11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--muted); display: block; margin-bottom: 8px;">O ENLACE URL</label>
+                            <input type="text" id="slide-img" placeholder="https://..." style="width:100%; background:var(--bg); border:1px solid var(--border); color:#fff; padding:12px; border-radius:4px; outline:none;">
+                        </div>
+                    </div>
+                    <button class="checkout-btn" onclick="guardarSlideAdmin()">AÑADIR BANNER AL CARRUSEL</button>
+                </div>
+
+                <!-- TAB INVENTARIO -->
+                <div id="tab-inventario" class="admin-tab-pane tab-content" style="display: none;">
+                    <h3 style="color: var(--gold); margin-bottom: 15px; font-size: 14px;"><i class="fas fa-database"></i> CONTROL DE INVENTARIO</h3>
+                    <div id="admin-inventario-reporte" style="margin-bottom: 20px; background: var(--bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border);"></div>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+                        <input type="text" id="admin-buscar-inv" placeholder="Buscar en inventario..." oninput="filtrarInventarioAdmin(this.value)" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 4px; outline: none; font-size: 12px;">
+                        <button class="editorial-outline-btn" onclick="detectarYLimpiarRepetidos()" style="background: rgba(255,165,0,0.1); border-color: orange; color: orange; font-size: 10px; padding: 10px 15px;">Limpiar Duplicados</button>
+                        <button class="editorial-outline-btn" onclick="eliminarSeleccionadosAdmin()" style="background: rgba(255,71,87,0.1); border-color: #ff4757; color: #ff4757; font-size: 10px; padding: 10px 15px;">Borrar Selección</button>
+                        <button class="checkout-btn" onclick="guardarCambiosInventarioManual()" style="font-size: 10px; padding: 10px 20px; background: var(--gold); color: #000; font-weight: 800;"><i class="fas fa-save"></i> GUARDAR CAMBIOS</button>
+                    </div>
+                    
+                    <div style="overflow-x: auto; max-height: 400px;">
+                        <table class="editorial-table" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+                                    <th style="width: 40px; text-align: center;"><input type="checkbox" id="check-master" onclick="seleccionarTodosAdmin()"></th>
+                                    <th>Vista</th>
+                                    <th>Ref & Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio ($ COP)</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/productos.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
